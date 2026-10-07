@@ -10,10 +10,23 @@
         <option value="$PROJECT_DIR$/transaction-service/transaction-service/pom.xml" />
         <option value="$PROJECT_DIR$/notification-service/notification-service/pom.xml" />
         <option value="$PROJECT_DIR$/fraud-detection-service/fraud-detection-service/pom.xml" />
+        <option value="$PROJECT_DIR$/account-service/pom.xml" />
+        <option value="$PROJECT_DIR$/fraud-detection/pom.xml" />
+        <option value="$PROJECT_DIR$/fraud-detection-service/pom.xml" />
+        <option value="$PROJECT_DIR$/api-gateway/pom.xml" />
+        <option value="$USER_HOME$/OneDrive/VVI file/Desktop/upi-fraud-detection/fraud-detection-service/fraud-detection-service/pom.xml" />
       </list>
     </option>
+    <option name="ignoredFiles">
+      <set>
+        <option value="$PROJECT_DIR$/account-service/pom.xml" />
+        <option value="$PROJECT_DIR$/api-gateway/pom.xml" />
+        <option value="$PROJECT_DIR$/fraud-detection-service/pom.xml" />
+        <option value="$PROJECT_DIR$/fraud-detection/pom.xml" />
+      </set>
+    </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_25" default="true" project-jdk-name="loom-ea-25" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_17" default="true" project-jdk-name="ms-17" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/out" />
   </component>
 </project>
