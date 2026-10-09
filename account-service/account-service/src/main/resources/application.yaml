@@ -4,7 +4,7 @@ spring:
 
   datasource:
     datasource:
-      url: jdbc:postgresql://localhost:5432/Account_service
+      url: jdbc:postgresql://localhost:5432/account_db?createDatabaseIfNotExist=true
       username: postgres
       password: sudip@21
       driver-class-name: org.postgresql.Driver
