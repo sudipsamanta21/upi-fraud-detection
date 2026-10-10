@@ -17,7 +17,7 @@
         </processorPath>
         <module name="account-service" />
       </profile>
-      <profile name="Annotation profile for fraud-detection-service" enabled="true">
+      <profile name="Annotation profile for transaction-service" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
