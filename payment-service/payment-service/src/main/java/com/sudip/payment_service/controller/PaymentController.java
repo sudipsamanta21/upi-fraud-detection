@@ -1,0 +1,41 @@
+package com.sudip.payment_service.controller;
+
+
+import com.razorpay.RazorpayException;
+import com.sudip.payment_service.dto.CreatePaymentRequest;
+import com.sudip.payment_service.dto.PaymentOrderResponse;
+import com.sudip.payment_service.service.PaymentService;
+import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Map;
+
+@RestController
+@RequestMapping("/api/v1/payments")
+@Slf4j
+public class PaymentController {
+
+    private PaymentService paymentService;
+
+
+
+    @PostMapping("/create-order")
+    public ResponseEntity<PaymentOrderResponse> createPaymentOrder (
+            @Valid @RequestBody CreatePaymentRequest createPaymentRequest) throws RazorpayException {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(paymentService.createPaymentOrder(createPaymentRequest));
+    }
+
+    @PostMapping("/webhook")
+    public ResponseEntity<String> handleWebhook (
+             @RequestBody Map<String, Object> payload) {
+        paymentService.handleWebhook(payload);
+        return ResponseEntity.ok("Webhook processed successfully");
+    }
+}
