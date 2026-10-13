@@ -17,7 +17,10 @@ public class AccountEvenConsumer {
     private final AccountService accountService;
 
 
-    @KafkaListener(topics = "transaction-completed")
+    @KafkaListener(
+            topics = "transaction.completed",
+            groupId = "account-service-group"
+    )
     public void consumeTransactionCompleted(@Payload Map<String, Object> payload) {
         log.info("Received transaction completed event: {}", payload);
         // Process the event and update account balance accordingly
@@ -36,7 +39,10 @@ public class AccountEvenConsumer {
 
 
 
-    @KafkaListener(topics = "Fraud-detected")
+    @KafkaListener(
+            topics = "fraud.detected",
+            groupId = "account-service-group"
+    )
     public void consumeFraudDetected (@Payload Map<String, Object> payload) {
         try {
             String accountNumber = (String) payload.get("accountNumber");

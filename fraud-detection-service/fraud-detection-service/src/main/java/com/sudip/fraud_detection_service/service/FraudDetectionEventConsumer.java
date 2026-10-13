@@ -17,7 +17,8 @@ public class FraudDetectionEventConsumer {
     private final FraudDetectionService fraudDetectionService;
 
 
-    @KafkaListener(topics = "transaction.initiated", groupId = "fraud-detection-group")
+    @KafkaListener(topics = "transaction.initiated",
+            groupId = "fraud-detection-group")
     public void consumeTransactionInitiated (
             @Payload Map<String, Object> payload){
 

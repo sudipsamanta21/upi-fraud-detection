@@ -68,7 +68,7 @@ public class FraudDetectionService {
             verificationEvent.put("reason", result.getReason());
 
 
-            kafkaTemplate.send(VERIFICATION_REQUIRED_TOPIC,transactionId, verificationEvent.toString());
+            kafkaTemplate.send(VERIFICATION_REQUIRED_TOPIC,transactionId, verificationEvent);
 
         }else {
             log.info("Transaction clean");
@@ -78,7 +78,7 @@ public class FraudDetectionService {
             transactionCleanEvent.put("isFraud",false);
             transactionCleanEvent.put("reason", null);
 
-            kafkaTemplate.send(FRAUD_CHECK_CLEAN_RESULT_TOPIC,transactionId, transactionCleanEvent.toString());
+            kafkaTemplate.send(FRAUD_CHECK_CLEAN_RESULT_TOPIC,transactionId, transactionCleanEvent);
         }
     }
 

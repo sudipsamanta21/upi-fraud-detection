@@ -20,17 +20,18 @@ public class NotificationService {
             String accountNumber = (String) payload.get("accountNumber");
             String otp = (String) payload.get("otp");
             String transactionId = (String) payload.get("transactionId");
-            String amount = (String) payload.get("amount");
+            String amount = String.valueOf(payload.get("amount"));
             String reason = (String) payload.get("reason");
 
             sendAlert(accountNumber,
                     "TRANSACTION VERIFICATION REQUIRED",
                     String.format(
                             "Suspicious activity detected on your account. "+
-                             "Reason: %s "+
-                             "A transaction of %s is pending verification. "+
-                             "Your OTP is: %s. Valid for 5 minutes. "+
-                             "If this wasn't you - ignore this message. "
+                                    "Reason: %s "+
+                                    "A transaction of %s is pending verification. "+
+                                    "Your OTP is: %s. Valid for 5 minutes. "+
+                                    "If this wasn't you - ignore this message. ",
+                            reason,amount,otp
                     )
             );
         }catch (Exception e){
@@ -38,7 +39,136 @@ public class NotificationService {
         }
     }
 
-    private void sendAlert(String accountNumber,String subject,  String format) {
 
+
+    @KafkaListener(topics = "transaction.completed")
+    public  void consumeTransactionCompleted (
+            @Payload Map<String,Object> payload){
+        try{
+            String senderAccountNumber =
+                    String.valueOf(payload.get("senderAccountNumber"));
+
+            String receiverAccountNumber =
+                    String.valueOf(payload.get("receiverAccountNumber"));
+            String amount = String.valueOf(payload.get("amount"));
+
+            sendAlert(receiverAccountNumber,
+                    "DEBIT ALERT",
+                    String.format(
+                            "%s debited from account %s", amount, senderAccountNumber
+                    ));
+
+            sendAlert(senderAccountNumber,
+                    "CREDIT ALERT",
+                    String.format(
+                            "%s credited from account %s", amount, receiverAccountNumber
+                    ));
+        } catch (Exception e) {
+            log.error("Error sending transaction notification: {}",  e.getMessage());
+        }
+    }
+
+
+    @KafkaListener(topics = "fraud.detected")
+    public void consumeFraudDetected (
+            @Payload Map<String,Object> payload){
+        try{
+            String accountNumber = (String) payload.get("accountNumber");
+            String reason = (String) payload.get("reason");
+
+            sendAlert(accountNumber,
+                    "FRAUD ALERT",
+                    String.format(
+                            "Suspicious activity detected on your account. "+
+                                    "Reason: %s "+
+                                    "Your account %s has been blocked for security. "+
+                                    "Kindly contact to the bank.",
+                            accountNumber,reason
+                    )
+            );
+        }catch (Exception e){
+            log.info("Error sending fraud alert: {}",  e.getMessage());
+        }
+    }
+
+
+
+    @KafkaListener(topics = "transaction.refunded")
+    public void consumeTransactionRefunded (
+            @Payload Map<String,Object> payload){
+        try{
+            String senderAccountNumber = (String) payload.get("senderAccountNumber");
+            String amount = String.valueOf(payload.get("amount"));
+            String reason = (String) payload.get("reason");
+
+            sendAlert(senderAccountNumber,
+                    "REFUND PROCESSED",
+                    String.format(
+                            "Your transaction of %s was cancelled. "+
+                                    "Reason: %s"+
+                                    "%s has been refunded to account %s.",
+
+                            amount,reason,amount,senderAccountNumber
+                    )
+            );
+        }catch (Exception e){
+            log.info("Error sending refund notification: {}",  e.getMessage());
+        }
+    }
+
+    @KafkaListener(topics = "payment.completed")
+    public void consumePaymentCompleted (
+            @Payload Map<String,Object> payload) {
+        try {
+            String accountNumber = (String) payload.get("accountNumber");
+            String amount = String.valueOf(payload.get("amount"));
+
+            sendAlert(
+                    accountNumber,
+                    "PAYMENT SUCCESSFUL",
+                    String.format(
+                            "Your payment of %s has been successfully completed. " +
+                                    "Razorpay ID: %s",
+                            "Thank you for using our services.",
+                            amount, payload.get("razorpayPaymentId")
+                    ));
+        } catch (Exception e) {
+            log.info("Error sending payment notification: {}", e.getMessage());
+        }
+    }
+
+
+
+    @KafkaListener(topics = "payment.failed")
+    public void consumePaymentFailed (
+            @Payload Map<String,Object> payload) {
+        try {
+            String accountNumber = (String) payload.get("accountNumber");
+            String amount = String.valueOf(payload.get("amount"));
+
+            sendAlert(
+                    accountNumber,
+                    "PAYMENT FAILED",
+                    String.format(
+                            "Your payment of %s could not be processed. "+
+                                    "Please try again or contact support.",
+                            amount
+                    )
+            );
+        } catch (Exception e){
+            log.error("Error sending payment failure notification: {}",  e.getMessage());
+        }
+    }
+
+
+
+
+    private void sendAlert(String accountNumber,String subject,  String message) {
+
+        log.info("---------------------------------------");
+        log.info("Account : {}",accountNumber);
+        log.info("Subject : {}",subject);
+        log.info("Message : {}",message);
+        log.info("--------------------------------------");
     }
 }

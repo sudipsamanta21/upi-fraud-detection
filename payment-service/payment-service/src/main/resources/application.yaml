@@ -3,11 +3,10 @@ spring:
     name: payment-service
 
   datasource:
-    datasource:
-      url: jdbc:postgresql://localhost:5432/payment_db?createDatabaseIfNotExist=true
-      username: postgres
-      password: sudip@21
-      driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/payment_db
+    username: postgres
+    password: sudip@21
+    driver-class-name: org.postgresql.Driver
 
   jpa:
     hibernate:
@@ -26,7 +25,7 @@ spring:
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
 
     consumer:
-      group-id: account-service-group
+      group-id: payment-service-group
       auto-offset-reset: earliest
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer

@@ -120,7 +120,7 @@ public class PaymentService {
             log.warn("Payment failed: {}", payment.getId());
 
         } catch (Exception e) {
-            log.error("Error handling payment faliure: {}", e.getMessage());
+            log.error("Error handling payment failure: {}", e.getMessage());
         }
     }
 
